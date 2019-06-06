@@ -1,73 +1,32 @@
-base_global_planner: navfn/NavfnROS
 base_local_planner: teb_local_planner/TebLocalPlannerROS
-
-recovery_behaviors: [{
-    name: conservative_reset,
-    type: clear_costmap_recovery/ClearCostmapRecovery
-  }, {
-    name: rotate_recovery1,
-    type: rotate_recovery/RotateRecovery
-  }, {
-    name: aggressive_reset,
-    type: clear_costmap_recovery/ClearCostmapRecovery
-  }, {
-    name: rotate_recovery2,
-    type: rotate_recovery/RotateRecovery
-  }]
-
-planner_frequency:          0     # Global plan updates on new goal or path blocked only
-controller_frequency:       20
-planner_patience:           5.0
-controller_patience:        3.0
-conservative_reset_dist:    2.0
-recovery_behavior_enabled:  true
-clearing_rotation_allowed:  true
-shutdown_costmaps:          false
-oscillation_timeout:        0.0
-oscillation_distance:       0.5
-
-
-
-
-# http://www.ros.org/wiki/navfn
-NavfnROS:
-  allow_unknown:                      true
-  planner_window_x:                   0.0
-  planner_window_y:                   0.0
-  default_tolerance:                  0.1
-  visualize_potential:                true
-  planner_costmap_publish_frequency:  0.5
-  orientation_mode:                     1
-
-
-
 TebLocalPlannerROS:
 
 #Robot configuration
- min_turning_radius: 2.0
+ min_turning_radius: 0.5
  acc_lim_x : 0.4
  acc_lim_theta : 0.2
  max_vel_x : 0.5
  max_vel_x_backwards : 0.2
  max_vel_theta : 0.5
-
+ wheelbase : 0.5
+ footprint_model/type : "point"
 #Goal Tolerance Parameters
 
  xy_goal_tolerance : 0.1
- yaw_goal_tolerance : 0.3
+ yaw_goal_tolerance : 0.05
  free_goal_vel: False
 
 #Trajectory Configuration Parameters
  teb_autosize: True
  dt_ref: 0.3
- dt_hysteresis: 0.1
+ dt_hysteresis: 0.4
  global_plan_overwrite_orientation: True
- max_global_plan_lookahead_dist: 3.0
+ max_global_plan_lookahead_dist: 6.0
  feasibility_check_no_poses: 5
 
 #Obstacle Parameters
 
- min_obstacle_dist : 0.3
+ min_obstacle_dist : 0.5
  include_costmap_obstacles : true
 
 # Optimization
@@ -89,6 +48,7 @@ weight_obstacle: 50
 weight_dynamic_obstacle: 10 # not in use yet
 
 
+enable_homotopy_class_planning: false
 
 
 
