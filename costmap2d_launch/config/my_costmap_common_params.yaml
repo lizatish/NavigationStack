@@ -12,4 +12,3 @@ raytrace_range: 6.0
 
 observation_sources: laser_scan_sensor
 laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
-

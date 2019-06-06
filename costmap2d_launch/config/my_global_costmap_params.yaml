@@ -10,5 +10,3 @@ global_costmap:
   transform_tolerance: 10
   always_send_full_costmap: false
 
-
-
