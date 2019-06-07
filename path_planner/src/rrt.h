@@ -5,6 +5,7 @@
 #include <geometry_msgs/Pose2D.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Path.h>
+#include <tf/transform_broadcaster.h>
 
 #include <math.h>
 #include <vector>
@@ -81,7 +82,7 @@ public:
   ~RRT();
 
   // Начать планирование
-  nav_msgs::Path Planning(geometry_msgs::Pose2D s, geometry_msgs::Pose2D g,
+  nav_msgs::Path Planning(geometry_msgs::Pose s, geometry_msgs::Pose g,
                                         const nav_msgs::OccupancyGrid& gMap, float curv,
                                         float robot_height, float robot_width ,int maxIter0 = 100);
 };
