@@ -301,8 +301,8 @@ bool RRT::collisionCheck(Node* node){
     int finish_size_y = ROBOT_WIDTH/(2*mapResolution);
 
     for(int k = 0; k < node->path_x.size(); k++){
-        int x_robot_center = int(node->path_x[k]/mapResolution - globalMap.info.origin.position.x / globalMap.info.resolution);
-        int y_robot_center = int(node->path_y[k]/mapResolution  - globalMap.info.origin.position.y / globalMap.info.resolution);
+        int x_robot_center = int(node->path_x[k]/mapResolution - globalMap.info.origin.position.x /mapResolution);
+        int y_robot_center = int(node->path_y[k]/mapResolution  - globalMap.info.origin.position.y / mapResolution);
         float robot_yaw = node->path_yaw[k];
 
         float sin_yaw = sin(robot_yaw);
@@ -316,6 +316,8 @@ bool RRT::collisionCheck(Node* node){
                     // Составляющая поворота
                     int x_robot_size = x_robot_center + i * cos_yaw + j * sin_yaw;
                     int y_robot_size = y_robot_center - i * sin_yaw + j * cos_yaw;
+//                    cout << x_robot_size << " " << y_robot_size << " " <<
+//                            x_robot_center << " " << y_robot_center << endl;
 
                     if(int(globalMap.data[map_width * y_robot_size + x_robot_size]) > 75){
                         return false;
