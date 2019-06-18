@@ -10,5 +10,7 @@ obstacle_range: 5.5
 # Максимальная дальность отбрасываемых лучей
 raytrace_range: 6.0
 
-observation_sources: laser_scan_sensor
-laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
+obstacles:
+  laser_scan_sensor: {data_type: LaserScan, topic: scan, marking: true, clearing: true}
+  observation_sources: laser_scan_sensor
+  transform_tolerance: 0.3

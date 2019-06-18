@@ -301,7 +301,6 @@ bool RRT::collisionCheck(Node* node){
     int finish_size_y = ROBOT_WIDTH/(2*mapResolution);
 
     for(int k = 0; k < node->path_x.size(); k++){
-
         int x_robot_center = int(node->path_x[k]/mapResolution - globalMap.info.origin.position.x / globalMap.info.resolution);
         int y_robot_center = int(node->path_y[k]/mapResolution  - globalMap.info.origin.position.y / globalMap.info.resolution);
         float robot_yaw = node->path_yaw[k];

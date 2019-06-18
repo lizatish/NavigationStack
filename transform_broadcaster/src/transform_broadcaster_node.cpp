@@ -37,12 +37,12 @@ int main(int argc, char** argv){
         current_time = ros::Time::now();
         //send the transform
         if(isCameOdom){
-            tf_map_to_odom();
+//                        tf_map_to_odom();
             tf_odom_to_base_link();
             tf_base_link_to_base_footprint();
             tf_base_link_to_laser();
 
-            broadcaster_map2odom.sendTransform(ts_map2odom);
+//                        broadcaster_map2odom.sendTransform(ts_map2odom);
             broadcaster_odom2base_link.sendTransform(ts_odom2base_link);
             broadcaster_base_link2base_footprint.sendTransform(ts_base_link2base_footprint);
             broadcaster_base_link2laser.sendTransform(ts_base_link2laser);

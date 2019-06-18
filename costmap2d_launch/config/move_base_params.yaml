@@ -2,31 +2,31 @@ base_local_planner: teb_local_planner/TebLocalPlannerROS
 TebLocalPlannerROS:
 
 #Robot configuration
- min_turning_radius: 0.5
- acc_lim_x : 0.4
- acc_lim_theta : 0.2
- max_vel_x : 0.5
- max_vel_x_backwards : 0.2
- max_vel_theta : 0.5
+ min_turning_radius: 0.3
+ acc_lim_x : 0.02
+ acc_lim_theta : 0.02
+ max_vel_x : 0.05
+ max_vel_x_backwards : 0.05
+ max_vel_theta : 0.2
  wheelbase : 0.5
  footprint_model/type : "point"
 #Goal Tolerance Parameters
 
  xy_goal_tolerance : 0.1
- yaw_goal_tolerance : 0.05
+ yaw_goal_tolerance : 0.5
  free_goal_vel: False
 
 #Trajectory Configuration Parameters
  teb_autosize: True
- dt_ref: 0.3
- dt_hysteresis: 0.4
+ dt_ref: 0.4
+ dt_hysteresis: 0.3
  global_plan_overwrite_orientation: True
  max_global_plan_lookahead_dist: 6.0
  feasibility_check_no_poses: 5
 
 #Obstacle Parameters
 
- min_obstacle_dist : 0.5
+ min_obstacle_dist : 0.25
  include_costmap_obstacles : true
 
 # Optimization
@@ -35,18 +35,17 @@ no_inner_iterations: 5
 no_outer_iterations: 4
 optimization_activate: True
 optimization_verbose: False
-penalty_epsilon: 0.1
-weight_max_vel_x: 2
-weight_max_vel_theta: 1
-weight_acc_lim_x: 1
-weight_acc_lim_theta: 1
+weight_max_vel_x: 100
+weight_max_vel_theta: 10
+weight_acc_lim_x: 0.1
+weight_acc_lim_theta: 0.1
 weight_kinematics_nh: 1000
-weight_kinematics_forward_drive: 1
-weight_kinematics_turning_radius: 1
-weight_optimaltime: 700
-weight_obstacle: 50
+weight_kinematics_forward_drive: 1000
+weight_kinematics_turning_radius: 10
+weight_optimaltime: 50
+weight_obstacle: 100
 weight_dynamic_obstacle: 10 # not in use yet
-
+penalty_epsilon: 1
 
 enable_homotopy_class_planning: false
 

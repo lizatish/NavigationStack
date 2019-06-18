@@ -39,7 +39,7 @@ int main(int argc, char **argv){
 
     geometry_msgs::Pose goal;
     goal.position.x = 3;
-    goal.position.y = 1;
+    goal.position.y = 5;
     goal.orientation = tf::createQuaternionMsgFromYaw(1.5);
 
     geometry_msgs::PoseStamped goal_rviz;
@@ -93,6 +93,8 @@ void odometryCallback(const nav_msgs::Odometry data){
 }
 
 void globalMapCallback(const nav_msgs::OccupancyGrid& data){
+//    cout << globalMap.info.origin.position.x << " " << globalMap.info.origin.position.y << " " << mapResolution << endl;
+    ///// ттут чтото не так
     globalMap.info.resolution = data.info.resolution;
     globalMap.info.height = data.info.height;
     globalMap.info.width = data.info.width;
