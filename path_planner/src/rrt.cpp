@@ -299,31 +299,40 @@ bool RRT::collisionCheck(Node* node){
     int start_size_y = -ROBOT_WIDTH/(2*mapResolution);
     int finish_size_x = ROBOT_HEIGHT/(2*mapResolution);
     int finish_size_y = ROBOT_WIDTH/(2*mapResolution);
-
     for(int k = 0; k < node->path_x.size(); k++){
-        int x_robot_center = int(node->path_x[k]/mapResolution - globalMap.info.origin.position.x /mapResolution);
-        int y_robot_center = int(node->path_y[k]/mapResolution  - globalMap.info.origin.position.y / mapResolution);
+        int x_robot_center = int((node->path_x[k] /*- globalMap.info.origin.position.x*/) / mapResolution);
+        int y_robot_center = int((node->path_y[k] /*- globalMap.info.origin.position.y*/) / mapResolution);
         float robot_yaw = node->path_yaw[k];
 
         float sin_yaw = sin(robot_yaw);
         float cos_yaw = cos(robot_yaw);
+//cout << node->path_x[k] << " " << node->path_y[k] << endl;
+//       cout << x_robot_center << " " << y_robot_center << " " <<
+//            start_size_x <<  " " <<start_size_y <<  " " << endl;
+        int counter = 0;
 
         if(x_robot_center + start_size_x >= 0 && x_robot_center + finish_size_x < globalMap.info.width
                 && y_robot_center + start_size_y >= 0 && y_robot_center + finish_size_y < globalMap.info.height)
             for(int i = start_size_x; i <= finish_size_x; i++){
                 for(int j = start_size_y; j <= finish_size_y; j++){
 
-                    // Составляющая поворота
+                counter++;
+                // Составляющая поворота
                     int x_robot_size = x_robot_center + i * cos_yaw + j * sin_yaw;
                     int y_robot_size = y_robot_center - i * sin_yaw + j * cos_yaw;
 //                    cout << x_robot_size << " " << y_robot_size << " " <<
 //                            x_robot_center << " " << y_robot_center << endl;
 
                     if(int(globalMap.data[map_width * y_robot_size + x_robot_size]) > 75){
+//                        cout << <x_robot_size << " " << y_robot_size << endl;
                         return false;
                     }
                 }
+
             }
+// cout << counter << endl;
+
     }
+
     return true;
 }

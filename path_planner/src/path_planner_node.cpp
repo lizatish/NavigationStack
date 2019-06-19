@@ -61,7 +61,7 @@ int main(int argc, char **argv){
 //                currentPosition.position.y << " " <<
 //                goal.position.x << " " <<
 //                goal.position.y << endl;
-        //cout << isCameOdom << " " << isCameGlobalMap << " " <<  isGoalCame << endl;
+//        cout << isCameOdom << " " << isCameGlobalMap << " " <<  isGoalCame << endl;
         if(isCameOdom && isCameGlobalMap && isGoalCame){
             //      isCameOdom = false;
             //      isCameGlobalMap = false;
@@ -120,10 +120,10 @@ void globalMapCallback(const nav_msgs::OccupancyGrid& data){
     globalMap.info.resolution = data.info.resolution;
     globalMap.info.height = data.info.height;
     globalMap.info.width = data.info.width;
-    globalMap.info.origin.position.x = data.info.origin.position.x;
-     globalMap.info.origin.position.y = data.info.origin.position.y;
-//cout << globalMap.info.origin<< endl;
-    globalMap.data = data.data;
+    globalMap.info.origin.position.x = -(data.info.height*data.info.resolution)/2;
+     globalMap.info.origin.position.y = -(data.info.width*data.info.resolution)/2;
+//cout << globalMap.info<< endl;
+     globalMap.data = data.data;
 
     for(int i = 0; i < globalMap.info.width; i++)
         for(int j = 0; j < globalMap.info.height; j++){
@@ -139,4 +139,11 @@ void globalMapCallback(const nav_msgs::OccupancyGrid& data){
             }
         }
     isCameGlobalMap = true;
+     globalMap.data[globalMap.info.width * 0 +0] = 100;
+     globalMap.data[globalMap.info.width * 1 + 1] = 100;
+     globalMap.data[globalMap.info.width * 2 + 2] = 100;
+
+     globalMap.data[globalMap.info.width * 250 +250] = 100;
+     globalMap.data[globalMap.info.width * 1 + 250] = 100;
+     globalMap.data[globalMap.info.width * 2 + 250] = 100;
 }
