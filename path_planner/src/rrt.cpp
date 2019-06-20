@@ -65,7 +65,7 @@ nav_msgs::Path RRT::Planning(geometry_msgs::Pose s, geometry_msgs::Pose g,
             rewire(nearInds);
         }
     }
-    //  cout << ros::Time::now().toSec() - start_time.toSec() << endl;
+//      cout << ros::Time::now().toSec() - start_time.toSec() << endl;
     int lastIndex = get_best_last_index();
     nav_msgs::Path path = gen_final_course(lastIndex);
     path.header.frame_id = "/map";
