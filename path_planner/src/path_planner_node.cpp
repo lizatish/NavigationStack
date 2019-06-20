@@ -53,16 +53,17 @@ int main(int argc, char **argv){
         //        cout << isCameOdom << " " << isCameGlobalMap << " " <<  isGoalCame << endl;
         if(isCameOdom && isCameGlobalMap && isGoalCame){
 
-            previous_path = current_path;
+
             // Запуск планировщика
             RRT* rrt = new RRT();
             current_path = rrt->Planning(currentPosition, goal, globalMap, CURVATURE, ROBOT_HEIGHT, ROBOT_WIDTH);
             delete rrt;
 
             if(current_path.poses.size()){
-                if(current_path.poses.size() < previous_path.poses.size() - 20 || !previous_path.poses.size()){
+                if(current_path.poses.size() < 1.1 * previous_path.poses.size() || !previous_path.poses.size()){
                     cout << "Path is " << current_path.poses.size() << endl;
                     path_for_control_pub.publish(current_path);
+                    previous_path = current_path;
                 }
                 else{
                     cout << "Path is not found" << endl;
