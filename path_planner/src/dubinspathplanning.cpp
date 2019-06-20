@@ -290,10 +290,10 @@ DubinsPathPlanning::coords DubinsPathPlanning::generate_course(float* length, st
     float pd = 0.0;
     float d;
     if (mode[i] == 'S'){
-      d = 20.0 / c * M_PI / 180;
+      d = 10.0 / c * M_PI / 180; // Первое число отвечает за точность шагов и их колво
     }
     else{
-      d = 3.0 * M_PI / 180;
+      d = 30.0 * M_PI / 180;
     }
 
     while (pd < abs(length[i] - d)){

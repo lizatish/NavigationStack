@@ -2,7 +2,6 @@
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 #include <nav_msgs/Odometry.h>
-//#include <gmapping/grid/map.h>
 
 
 void odometryCallback(const nav_msgs::Odometry data);
@@ -17,7 +16,7 @@ static nav_msgs::Path previous_path;
 
 static float ROBOT_HEIGHT = 0.7;
 static float ROBOT_WIDTH = 0.5;
-static const float CURVATURE = 0.3;
+static const float CURVATURE = 0.2;
 
 //Текущее положение платформы
 static geometry_msgs::Pose currentPosition;
@@ -25,9 +24,10 @@ static nav_msgs::OccupancyGrid globalMap;
 
 static bool isCameGlobalMap = false;
 static bool isCameOdom = false;
-geometry_msgs::Pose goal;
-geometry_msgs::PoseStamped goal_rviz;
-bool isGoalCame = false;
+static bool isGoalCame = false;
+
+static geometry_msgs::Pose goal;
+static geometry_msgs::PoseStamped goal_rviz;
 
 int main(int argc, char **argv){
     ros::init(argc, argv, "kuka_path_searcher_node");
@@ -38,7 +38,6 @@ int main(int argc, char **argv){
     ros::Publisher path_for_control_pub = l.advertise<nav_msgs::Path>("/target_path", 8);
     ros::Subscriber global_map_sub = l.subscribe("/map", 8, globalMapCallback);
     //    ros::Subscriber odom_sub = l.subscribe("/odom", 8, odometryCallback);
-    ros::Publisher global_map_pub = l.advertise<nav_msgs::OccupancyGrid>("/g_map", 8);
     ros::Publisher goal_pub = l.advertise<geometry_msgs::PoseStamped>("/rrt_goal", 8);
 
     ros::Subscriber goal_from_rviz_sub = l.subscribe("/move_base_simple/goal", 8, goalFromRvizCallback);
@@ -48,23 +47,11 @@ int main(int argc, char **argv){
     //    goal.position.y = 5;
     //    goal.orientation = tf::createQuaternionMsgFromYaw(1.5);
 
-    //    goal_rviz.pose = goal;
-    //    goal_rviz.header.frame_id = "map";
-    //    goal_rviz.header.stamp = ros::Time::now();
-
-
-
     ros::Rate rate(100);
     bool isAllowProcess = true;
     while(ros::ok() && isAllowProcess){
-//        cout << currentPosition.position.x << " " <<
-//                currentPosition.position.y << " " <<
-//                goal.position.x << " " <<
-//                goal.position.y << endl;
-//        cout << isCameOdom << " " << isCameGlobalMap << " " <<  isGoalCame << endl;
+        //        cout << isCameOdom << " " << isCameGlobalMap << " " <<  isGoalCame << endl;
         if(isCameOdom && isCameGlobalMap && isGoalCame){
-            //      isCameOdom = false;
-            //      isCameGlobalMap = false;
 
             previous_path = current_path;
             // Запуск планировщика
@@ -73,7 +60,7 @@ int main(int argc, char **argv){
             delete rrt;
 
             if(current_path.poses.size()){
-                if(current_path.poses.size() < previous_path.poses.size() - 10|| !previous_path.poses.size()){
+                if(current_path.poses.size() < previous_path.poses.size() - 20 || !previous_path.poses.size()){
                     cout << "Path is " << current_path.poses.size() << endl;
                     path_for_control_pub.publish(current_path);
                 }
@@ -83,7 +70,6 @@ int main(int argc, char **argv){
             }
         }
         path_for_rviz_pub.publish(current_path);
-        global_map_pub.publish(globalMap);
         goal_pub.publish(goal_rviz);
         ros::spinOnce();
         rate.sleep();
@@ -96,12 +82,6 @@ void slamOutPoseCallback(const geometry_msgs::PoseStamped& data){
 }
 
 void odometryCallback(const nav_msgs::Odometry data){
-    //    // Получение угла поворота
-    //    tf::Pose pose;
-    //    tf::poseMsgToTF(data.pose.pose, pose);
-    //    double yawAngle = tf::getYaw(pose.getRotation());
-
-    // Начальные координаты
     currentPosition = data.pose.pose;
     isCameOdom = true;
 }
@@ -115,35 +95,10 @@ void goalFromRvizCallback(const geometry_msgs::PoseStamped& data){
 }
 
 void globalMapCallback(const nav_msgs::OccupancyGrid& data){
-    //    cout << globalMap.info.origin.position.x << " " << globalMap.info.origin.position.y << " " << mapResolution << endl;
-    ///// ттут чтото не так
-    globalMap.info.resolution = data.info.resolution;
-    globalMap.info.height = data.info.height;
-    globalMap.info.width = data.info.width;
+    globalMap.info = data.info;
     globalMap.info.origin.position.x = -(data.info.height*data.info.resolution)/2;
-     globalMap.info.origin.position.y = -(data.info.width*data.info.resolution)/2;
-//cout << globalMap.info<< endl;
-     globalMap.data = data.data;
+    globalMap.info.origin.position.y = -(data.info.width*data.info.resolution)/2;
+    globalMap.data = data.data;
 
-    for(int i = 0; i < globalMap.info.width; i++)
-        for(int j = 0; j < globalMap.info.height; j++){
-
-            if((int)globalMap.data[globalMap.info.width * j + i] == -1) {
-                globalMap.data[globalMap.info.width * j + i] = 50;
-            }
-            if((int)globalMap.data[globalMap.info.width * j + i] > 75) {
-                globalMap.data[globalMap.info.width * j + i] = 100;
-            }
-            if((int)globalMap.data[globalMap.info.width * j + i] < 20) {
-                globalMap.data[globalMap.info.width * j + i] = 0;
-            }
-        }
     isCameGlobalMap = true;
-     globalMap.data[globalMap.info.width * 0 +0] = 100;
-     globalMap.data[globalMap.info.width * 1 + 1] = 100;
-     globalMap.data[globalMap.info.width * 2 + 2] = 100;
-
-     globalMap.data[globalMap.info.width * 250 +250] = 100;
-     globalMap.data[globalMap.info.width * 1 + 250] = 100;
-     globalMap.data[globalMap.info.width * 2 + 250] = 100;
 }

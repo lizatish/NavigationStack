@@ -297,8 +297,8 @@ int RRT::getNearestListIndex(Node* rnd){
 bool RRT::collisionCheck(Node* node){
     int start_size_x = -ROBOT_HEIGHT/(2*mapResolution);
     int start_size_y = -ROBOT_WIDTH/(2*mapResolution);
-    int finish_size_x = ROBOT_HEIGHT/(2*mapResolution);
-    int finish_size_y = ROBOT_WIDTH/(2*mapResolution);
+    int finish_size_x = -start_size_x;
+    int finish_size_y = -start_size_y;
     for(int k = 0; k < node->path_x.size(); k++){
         int x_robot_center = int((node->path_x[k] /*- globalMap.info.origin.position.x*/) / mapResolution);
         int y_robot_center = int((node->path_y[k] /*- globalMap.info.origin.position.y*/) / mapResolution);
